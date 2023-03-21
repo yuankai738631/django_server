@@ -71,4 +71,4 @@ def user_login(request):
         return JsonResponse({'code': 500, 'message': '账号或密码错误'})
     token = jwt.encode({'username': username, 'email': userinfo.eMail}, SECRET_KEY, algorithm='HS256')
 
-    return JsonResponse({'code': 200, 'message': '登录成功', 'data': {'token': str(token)}})
+    return JsonResponse({'code': 200, 'message': '登录成功', 'data': {'token': str(token), 'uid': userinfo.id}})
