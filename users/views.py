@@ -33,8 +33,8 @@ def logon(request):
                     users.save()
                     message = '注册成功'
                 else:
-                    users_account_item = models.Users.objects.get(account=account_name)
-                    users_email_item = models.Users.objects.get(eMail=email)
+                    users_account_item = models.Users.objects.filter(account=account_name).first()
+                    users_email_item = models.Users.objects.filter(eMail=email).first()
                     if users_account_item or users_email_item:
                         code = -3
                         message = '用户已存在，请直接登录'
@@ -66,7 +66,7 @@ def user_login(request):
 
     if username is None and password is None:
         return JsonResponse({'code': 500, 'message': '请求参数错误'})
-    userinfo = models.Users.objects.get(account=username)
+    userinfo = models.Users.objects.filter(account=username).first()
     if not userinfo or userinfo.passWord != password:
         return JsonResponse({'code': 500, 'message': '账号或密码错误'})
     token = jwt.encode({'username': username, 'email': userinfo.eMail}, SECRET_KEY, algorithm='HS256')
