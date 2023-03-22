@@ -89,7 +89,6 @@ def query_tasks(request):
         })
     paginator = Paginator(default_data, page_size)
     total = paginator.count
-    print(paginator.object_list)
     try:
         tasks = paginator.page(page)
     except PageNotAnInteger:
