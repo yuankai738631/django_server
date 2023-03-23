@@ -51,31 +51,26 @@ def query_tasks(request):
     status = obj.get('taskStatus', None)
     page = obj.get('page', 1)
     page_size = obj.get('pageSize', 10)
-    search_params = {
-        "task_name": task_name,
-        "project_name": project_name,
-        "status": status
-    }
 
     current_page = page
     project_list = []
     if task_name is None and project_name is None and status is None:
-        task_list = Task.objects.all()
+        task_list = Task.objects.all().order_by('-createTime')
     elif task_name and project_name and status:
         task_list = Task.objects.filter(Q(taskName__icontains=task_name), Q(projectName=project_name), Q(status=status))
     else:
         if task_name and project_name is None and status is None:
-            task_list = Task.objects.filter(Q(taskName__icontains=task_name))
+            task_list = Task.objects.filter(Q(taskName__icontains=task_name)).order_by('-createTime')
         elif task_name and project_name and status is None:
-            task_list = Task.objects.filter(Q(taskName__icontains=task_name), Q(projectName=project_name))
+            task_list = Task.objects.filter(Q(taskName__icontains=task_name), Q(projectName=project_name)).order_by('-createTime')
         elif task_name and project_name is None and status is not None:
-            task_list = Task.objects.filter(Q(taskName__icontains=task_name), Q(status=status))
+            task_list = Task.objects.filter(Q(taskName__icontains=task_name), Q(status=status)).order_by('-createTime')
         elif task_name is None and project_name and status is None:
-            task_list = Task.objects.filter(Q(projectName=project_name))
+            task_list = Task.objects.filter(Q(projectName=project_name)).order_by('-createTime')
         elif task_name is None and project_name and status is not None:
-            task_list = Task.objects.filter(Q(projectName=project_name), Q(status=status))
+            task_list = Task.objects.filter(Q(projectName=project_name), Q(status=status)).order_by('-createTime')
         elif task_name is None and project_name is None and status is not None:
-            task_list = Task.objects.filter(Q(status=status))
+            task_list = Task.objects.filter(Q(status=status)).order_by('-createTime')
     default_data = []
     for task in task_list:
         project_list.append(task.projectName)
